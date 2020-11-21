@@ -9,6 +9,7 @@ import datetime
 import time
 from imp import reload
 from multiprocessing.dummy import Pool as ThreadPool
+import importlib
 
 def datetime_to_timestamp_in_milliseconds(d):
     def current_milli_time(): return int(round(time.time() * 1000))
@@ -16,7 +17,7 @@ def datetime_to_timestamp_in_milliseconds(d):
     return current_milli_time()
 
 
-reload(sys)
+importlib.reload(sys)
 
 
 def LoadUserAgents(uafile):
@@ -79,9 +80,9 @@ for m in range(5214, 5215):
         time2 = time.time()
         try:
             jsDict = json.loads(jscontent)
-            statusJson = jsDict['status'] if 'status' in jsDict.keys() else False
+            statusJson = jsDict['status'] if 'status' in list(jsDict.keys()) else False
             if statusJson == True:
-                if 'data' in jsDict.keys():
+                if 'data' in list(jsDict.keys()):
                     jsData = jsDict['data']
                     mid = jsData['mid']
                     name = jsData['name']
@@ -92,7 +93,7 @@ for m in range(5214, 5215):
                     regtime_local = time.localtime(regtimestamp)
                     regtime = time.strftime("%Y-%m-%d %H:%M:%S",regtime_local)
                     spacesta = jsData['spacesta']
-                    birthday = jsData['birthday'] if 'birthday' in jsData.keys() else 'nobirthday'
+                    birthday = jsData['birthday'] if 'birthday' in list(jsData.keys()) else 'nobirthday'
                     sign = jsData['sign']
                     level = jsData['level_info']['current_level']
                     OfficialVerifyType = jsData['official_verify']['type']
@@ -139,7 +140,7 @@ for m in range(5214, 5215):
                 except Exception as e:
                     print(e)
             else:
-                print("Error: " + url)
+                print(("Error: " + url))
         except Exception as e:
             print(e)
             pass
